@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عدنان بسيريني | مطوّر ويب</title>
+
+  <!-- Bootstrap RTL -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  <!-- tsParticles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.min.css">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- hreflang (نسبي للمحلي) -->
+  <link rel="alternate" hreflang="en" href="./index.html" />
+  <link rel="alternate" hreflang="ar" href="./ar.html" />
+
+  <style>
+    :root{
+      --bar-h: 64px;
+      --bar-pad-x: 16px;
+      --glass-bg: rgba(255,255,255,0.14);
+      --glass-brd: rgba(255,255,255,0.25);
+    }
+    html{ scroll-behavior: smooth; }
+    body{
+      font-family: 'Cairo', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+      background-color: #0d6efd; color: #fff; position: relative;
+      padding-top: calc(var(--bar-h) + 14px); /* تعويض الشريط */
+    }
+    a{ color:#fff; text-decoration:none; }
+    a:hover{ color:#e0e0e0; }
+
+    /* خلفية الجزيئات */
+    #tsparticles{ position: fixed; inset: 0; z-index: -1; }
+
+    /* ======= الشريط العلوي ======= */
+    .topbar{
+      position: fixed; inset-inline: 0; inset-block-start: 0; height: var(--bar-h);
+      display: flex; align-items: center; justify-content: center;
+      padding-inline: var(--bar-pad-x);
+      background: var(--glass-bg);
+      border-bottom: 1px solid var(--glass-brd);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      transition: transform .25s ease, opacity .25s ease;
+    }
+    .topbar.hide{ transform: translateY(-100%); opacity: 0; }
+
+    .topbar-inner{ position: relative; width: 100%; max-width: 1200px; }
+    .brand{
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      width: 38px; height: 38px; border-radius: 50%;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(255,255,255,0.22); font-weight:800; color:#fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    }
+
+    /* مجموعة اليسار: لغة + منيو موبايل */
+    .left-cluster{
+      position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .btn-glass{
+      background: rgba(255,255,255,0.15);
+      border: 1px solid var(--glass-brd);
+      color: #fff; border-radius: 999px; padding: 8px 12px; font-weight: 700;
+      backdrop-filter: blur(8px);
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .btn-glass:hover{ background: rgba(255,255,255,0.22); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+
+    /* لغة */
+    .lang-switcher{ position: relative; }
+    .lang-menu{
+      position: absolute; top: calc(100% + 8px); left: 0;
+      min-width: 180px; padding: 8px; border-radius: 14px;
+      background: rgba(13,110,253,0.9);
+      border: 1px solid var(--glass-brd);
+      backdrop-filter: blur(10px);
+      display: none;
+    }
+    .lang-menu.open{ display:block; animation: fadeIn .15s ease; }
+    .lang-item{ display:block; padding:10px 12px; border-radius:10px; color:#fff; font-weight:700; }
+    .lang-item:hover{ background: rgba(255,255,255,0.15); }
+    .lang-item.active{ background: rgba(255,255,255,0.25); }
+
+    /* روابط الديسكتوب (وسط الشريط) */
+    .mini-nav{ display:flex; align-items:center; justify-content:center; gap:8px; }
+    .mini-nav a{ padding:8px 12px; border-radius:12px; font-weight:700; background: rgba(255,255,255,0.10); }
+    .mini-nav a:hover{ background: rgba(255,255,255,0.18); }
+
+    /* قائمة الموبايل تحت الشريط */
+    .mobile-menu{
+      position: fixed; left: 8px; right: 8px; top: calc(var(--bar-h) + 8px);
+      background: rgba(255,255,255,0.14);
+      border: 1px solid var(--glass-brd);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      padding: 8px;
+      z-index: 9998;
+      box-shadow: 0 12px 24px rgba(0,0,0,.18);
+      animation: fadeIn .15s ease;
+    }
+    .mobile-item{ display:block; padding:12px; font-weight:700; border-radius:10px; color:#fff; }
+    .mobile-item:hover{ background: rgba(255,255,255,0.18); }
+
+    /* أقسام المحتوى */
+    header { padding: 5rem 2rem 3rem; text-align: center; }
+    header h1 { font-weight: 700; font-size: 3rem; }
+    header p { font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+    section { padding: 4rem 0; }
+    .section-title { text-align: center; font-weight: 700; font-size: 2rem; margin-bottom: 3rem; }
+
+    .project{
+      background-color: rgba(255,255,255,0.05);
+      padding: 1.5rem; border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform .3s ease;
+    }
+    .project:hover{ transform: translateY(-5px); background-color: rgba(255,255,255,0.08); }
+
+    .skills-list li{ padding: .6rem; font-weight:600; border-bottom:1px solid rgba(255,255,255,.1); background-color: rgba(255,255,255,.03); }
+    footer{ padding:1.5rem; text-align:center; font-size:.9rem; color:#ccc; }
+
+    .btn-top{
+      position: fixed; bottom: 20px; left: 20px;
+      background-color:#6610f2; color:#fff; border:none;
+      padding:10px 15px; border-radius:50%; font-size:18px; cursor:pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .btn-top:hover{ background-color:#520dc2; }
+
+    /* منع تغطية الترويسات عند التمرير */
+    section, header{ scroll-margin-top: calc(var(--bar-h) + 24px); }
+
+    /* Responsive */
+    .menu-toggle{ display:none; }
+    @media (max-width:576px){
+      :root{ --bar-h: 56px; }
+      .mini-nav{ display:none; }       /* إخفاء روابط الديسكتوب */
+      .menu-toggle{ display:inline-flex; }
+      .btn-glass{ padding:8px 10px; }
+      .brand{ width:34px; height:34px; }
+      .topbar{ border-radius: 0 0 12px 12px; }
+    }
+
+    @keyframes fadeIn { from{opacity:0; transform:translateY(-4px);} to{opacity:1; transform:translateY(0);} }
+  </style>
+</head>
+<body id="top">
+  <div id="tsparticles"></div>
+
+  <!-- الشريط العلوي -->
+  <div class="topbar" data-aos="fade-down">
+    <div class="topbar-inner">
+      <!-- الشعار يمين -->
+      <a href="#top" class="brand">AB</a>
+
+      <!-- روابط الديسكتوب (تختفي على الموبايل) -->
+      <nav class="mini-nav">
+        <a href="#about">نبذة</a>
+        <a href="#projects">المشاريع</a>
+        <a href="#skills">المهارات</a>
+        <a href="#Languages">اللغات</a>
+        <a href="#info">التواصل</a>
+      </nav>
+
+      <!-- يسار: اللغة + زر منيو للموبايل -->
+      <div class="left-cluster">
+        <div class="lang-switcher">
+          <button class="btn btn-glass lang-toggle" aria-haspopup="true" aria-expanded="false" aria-label="تبديل اللغة">
+            <i class="fa-solid fa-globe"></i><span class="ms-2">العربية</span><i class="fa-solid fa-chevron-down ms-2"></i>
+          </button>
+          <div class="lang-menu shadow-lg" role="menu">
+            <a class="lang-item active" href="./ar.html" hreflang="ar" role="menuitem">🇸🇦 العربية</a>
+            <a class="lang-item" href="./index.html" hreflang="en" role="menuitem">🇬🇧 English</a>
+          </div>
+        </div>
+
+        <!-- زر منيو للموبايل -->
+        <button class="btn btn-glass menu-toggle" aria-controls="mobileMenu" aria-expanded="false" aria-label="فتح القائمة">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- قائمة الموبايل -->
+  <div id="mobileMenu" class="mobile-menu" hidden>
+    <a href="#about" class="mobile-item">نبذة</a>
+    <a href="#projects" class="mobile-item">المشاريع</a>
+    <a href="#skills" class="mobile-item">المهارات</a>
+    <a href="#Languages" class="mobile-item">اللغات</a>
+    <a href="#info" class="mobile-item">التواصل</a>
+  </div>
+
+  <header data-aos="fade-down">
+    <h1>عدنان بسيريني</h1>
+    <p class="lead">مطوّر ويب</p>
+    <p>مهندس حاسوب شغوف بتطوير الويب، أعمل دائمًا على التحسين والتعلّم المستمر.</p>
+  </header>
+
+  <!-- About -->
+  <section id="about" data-aos="fade-up">
+    <div class="container">
+      <h2 class="section-title">نبذة عني</h2>
+      <p class="text-center" style="max-width: 800px; margin: auto;">
+        أنا <strong>مطوّر ويب</strong> و<strong>مهندس حاسوب</strong> أستمتع ببناء حلول ويب ذكية وسهلة الاستخدام وقابلة للتوسّع. أحرص على التعلّم المستمر والمساهمة في المشاريع مفتوحة المصدر والعمل التطوعي. منفتح على الانتقال والعمل عن بُعد.
+      </p>
+    </div>
+    <div class="text-center mt-4" data-aos="zoom-in">
+      <a href="#" onclick="confirmAndDownload(event)" class="btn btn-light btn-lg">📄 تحميل السيرة الذاتية</a>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="container" id="projects" data-aos="fade-up">
+    <h2 class="section-title">المشاريع</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col">
+        <div class="project h-100 p-3">
+          <span class="badge bg-info mb-2">🎓 أكاديمي</span>
+          <h5><i class="fas fa-users me-2"></i>مشروع تخرّج CRM</h5>
+          <p>بناء نظام متكامل لإدارة علاقات العملاء باستخدام PHP خام. يشمل إدارة العملاء، تتبّع المبيعات، إدارة المستخدمين وتسجيل الدخول والمزيد.</p>
+          <p><strong>التقنيات:</strong> PHP (Native)، MySQL، Bootstrap</p>
+          <a href="#" class="btn btn-outline-light btn-sm mt-2">🔎 تفاصيل أكثر</a>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="project h-100 p-3">
+          <span class="badge bg-success mb-2">💼 احترافي</span>
+          <h5><i class="fas fa-chart-pie me-2"></i>لوحة إدارة المحتوى</h5>
+          <p>مبنية باستخدام Laravel Filament لتوفير إدارة سلسة وفعّالة للمحتوى وعمليات لوحة التحكّم.</p>
+          <p><strong>التقنيات:</strong> Laravel، Filament، PHP، MySQL</p>
+          <a href="#" class="btn btn-outline-light btn-sm mt-2">🔎 تفاصيل أكثر</a>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="project h-100 p-3">
+          <span class="badge bg-warning mb-2">🛠️ قيد التطوير</span>
+          <h5><i class="fas fa-database me-2"></i>تطبيق CRUD بسيط</h5>
+          <p>خادم خلفي بـ TypeScript و PNPM و TRPC و PostgreSQL (Docker). تم استخدام Kysely للطلبات و Zod للتحقق من البيانات.</p>
+          <p>(واجهة المستخدم قيد التطوير.)</p>
+          <a href="#" class="btn btn-outline-light btn-sm mt-2">🔎 تفاصيل أكثر</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" data-aos="fade-left">
+    <div class="container">
+      <h2 class="section-title">المهارات</h2>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="p-3 rounded shadow bg-dark bg-opacity-25">
+            <h4 class="text-center">الواجهة الأمامية</h4>
+            <div class="mb-3">
+              <label>HTML + CSS</label>
+              <div class="progress"><div class="progress-bar bg-primary text-white" role="progressbar" style="width:95%">95%</div></div>
+            </div>
+            <div class="mb-3">
+              <label>JavaScript</label>
+              <div class="progress"><div class="progress-bar bg-success text-white" role="progressbar" style="width:85%">85%</div></div>
+            </div>
+            <div class="mb-3">
+              <label>Bootstrap</label>
+              <div class="progress"><div class="progress-bar bg-info text-white" role="progressbar" style="width:75%">75%</div></div>
+            </div>
+            <div class="mb-3">
+              <label>VueJS</label>
+              <div class="progress"><div class="progress-bar bg-secondary text-white" role="progressbar" style="width:50%">50%</div></div>
+            </div>
+            <div class="mb-3">
+              <label>React (أساسيات)</label>
+              <div class="progress"><div class="progress-bar bg-dark text-white" role="progressbar" style="width:40%">40%</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div class="p-3 rounded shadow bg-dark bg-opacity-25">
+            <h4 class="text-center">الواجهة الخلفية</h4>
+            <div class="mb-3">
+              <label>PHP</label>
+              <div class="progress"><div class="progress-bar bg-primary text-white" role="progressbar" style="width:95%">95%</div></div>
+            </div>
+            <div class="mb-3">
+              <label>Laravel - Filament</label>
+              <div class="progress"><div class="progress-bar bg-success text-white" role="progressbar" style="width:90%">90%</div></div>
+            </div>
+            <div class="mb-3">
+              <label>TypeScript</label>
+              <div class="progress"><div class="progress-bar bg-info text-white" role="progressbar" style="width:80%">80%</div></div>
+            </div>
+            <div class="mb-3">
+              <label>Node.js + Express</label>
+              <div class="progress"><div class="progress-bar bg-warning text-white" role="progressbar" style="width:70%">70%</div></div>
+            </div>
+            <div class="mb-3">
+              <label>MySQL</label>
+              <div class="progress"><div class="progress-bar bg-danger text-white" role="progressbar" style="width:100%">100%</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- General Skills -->
+  <section id="version" data-aos="fade-left">
+    <div class="container">
+      <h2 class="section-title">مهارات عامة</h2>
+      <ul class="list-group skills-list" style="max-width:400px; margin:auto; padding:0;">
+  <li class="list-group-item skill-item" 
+      style="background:rgba(0,0,0,0.3); color:#fff; text-align:center; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s ease-in-out;">
+    <i class="fas fa-chart-line me-2" style="color:#17a2b8;"></i>مهارات تحليلية
+  </li>
+  <li class="list-group-item skill-item" 
+      style="background:rgba(0,0,0,0.3); color:#fff; text-align:center; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s ease-in-out;">
+    <i class="fab fa-microsoft me-2" style="color:#0078d7;"></i>أدوات مايكروسوفت
+  </li>
+  <li class="list-group-item skill-item" 
+      style="background:rgba(0,0,0,0.3); color:#fff; text-align:center; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s ease-in-out;">
+    <i class="fas fa-envelope me-2" style="color:#ffc107;"></i>خدمات المراسلة
+  </li>
+  <li class="list-group-item skill-item" 
+      style="background:rgba(0,0,0,0.3); color:#fff; text-align:center; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s ease-in-out;">
+    <i class="fab fa-wordpress me-2" style="color:#28a745;"></i>WordPress
+  </li>
+</ul>
+
+<script>
+  document.querySelectorAll(".skill-item").forEach(item => {
+    item.addEventListener("mouseenter", () => {
+      item.style.background = "rgba(0,0,0,0.5)";
+      item.style.transform = "translateY(-3px)";
+    });
+    item.addEventListener("mouseleave", () => {
+      item.style.background = "rgba(0,0,0,0.3)";
+      item.style.transform = "translateY(0)";
+    });
+  });
+</script>
+    </div>
+  </section>
+
+
+  <!-- Languages & Experience -->
+<section id="Languages" data-aos="fade-left">
+  <div class="container">
+    <h2 class="section-title text-center mb-4" style="color:#fff;">اللغات & الخبرات</h2>
+    <div class="row">
+      
+      <!-- Languages -->
+      <div class="col-md-6 mb-4">
+        <h4 class="text-center" style="color:#fff;">اللغات</h4>
+        <ul class="list-group skills-list" style="max-width:400px; margin:auto; padding:0;">
+          <li class="list-group-item lang-item" 
+              style="background:rgba(0,0,0,0.3); color:#fff; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s;">
+            <i class="fas fa-language me-2" style="color:#ffc107;"></i>العربية || لغة أم
+          </li>
+          <li class="list-group-item lang-item" 
+              style="background:rgba(0,0,0,0.3); color:#fff; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s;">
+            <i class="fas fa-language me-2" style="color:#17a2b8;"></i>التركية || C1
+          </li>
+          <li class="list-group-item lang-item" 
+              style="background:rgba(0,0,0,0.3); color:#fff; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s;">
+            <i class="fas fa-language me-2" style="color:#28a745;"></i>الانكليزية || B1
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Experience -->
+      <div class="col-md-6 mb-4">
+        <h4 class="text-center" style="color:#fff;">الخبرات</h4>
+        <ul class="list-group skills-list" style="max-width:400px; margin:auto; padding:0;">
+          <li class="list-group-item exp-item" 
+              style="background:rgba(0,0,0,0.3); color:#fff; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s;">
+            <i class="fas fa-users me-2" style="color:#17a2b8;"></i>"PR" at Molham Volunteering Team (4 years)
+          </li>
+          <li class="list-group-item exp-item" 
+              style="background:rgba(0,0,0,0.3); color:#fff; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s;">
+            <i class="fab fa-wordpress me-2" style="color:#28a745;"></i>تصميم مواقع (WordPress)
+          </li>
+          <li class="list-group-item exp-item" 
+              style="background:rgba(0,0,0,0.3); color:#fff; border:none; border-radius:12px; margin:6px 0; transition:all 0.3s;">
+            <i class="fas fa-hand-holding-heart me-2" style="color:#ffc107;"></i>مساعد مالي (سنتين)
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<script>
+  // Hover effect
+  document.querySelectorAll(".lang-item, .exp-item").forEach(item => {
+    item.addEventListener("mouseenter", () => {
+      item.style.background = "rgba(0,0,0,0.5)";
+      item.style.transform = "translateY(-3px)";
+    });
+    item.addEventListener("mouseleave", () => {
+      item.style.background = "rgba(0,0,0,0.3)";
+      item.style.transform = "translateY(0)";
+    });
+  });
+</script>
+<!-- Education & Contact -->
+  <section id="info" data-aos="fade-up">
+    <div class="container">
+      <h2 class="section-title">Education & Contact</h2>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="p-4 rounded shadow bg-dark bg-opacity-25 h-100">
+            <h5 class="mb-3 text-center"><i class="fas fa-graduation-cap me-2"></i>Education</h5>
+            <h5 class="mb-2 text-center">Erciyes University - Kayseri, Turkey</h5>
+            <p class="mb-1 text-center">Bachelor's Degree in Computer Engineering</p>
+            <p class="mb-1 text-center">GPA: 3.1 / 4.0</p>
+            <p class="text-warning text-center mb-0">Graduated</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div class="p-4 rounded shadow bg-dark bg-opacity-25 h-100">
+            <h5 class="mb-3 text-center"><i class="fas fa-envelope-open-text me-2"></i>Contact</h5>
+            <p class="text-center">Email: <a href="mailto:adnan.biseyrini@gmail.com">adnan.biseyrini@gmail.com</a></p>
+            <p class="text-center">LinkedIn: <a href="https://www.linkedin.com/in/adnan-biseyrini" target="_blank">Adnan-Biseyrini</a></p>
+            <p class="text-center">Telegram: <a href="https://t.me/al_bceriny" target="_blank">@al_bceriny</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer><p>© 2025 عدنان بسيريني. جميع الحقوق محفوظة.</p></footer>
+
+  <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-top">↑</button>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+  <script>
+    AOS.init({ duration: 1000, once: true });
+    tsParticles.load("tsparticles", {
+      background: { color: { value: "transparent" } },
+      fpsLimit: 60,
+      interactivity: { events: { onHover: { enable: true, mode: "repulse" }, resize: true }, modes: { repulse: { distance: 100, duration: 0.4 } } },
+      particles: {
+        color: { value: "#ffffff" },
+        links: { color: "#ffffff", distance: 150, enable: true, opacity: 0.5, width: 1 },
+        collisions: { enable: true },
+        move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 2, straight: false },
+        number: { density: { enable: true, area: 800 }, value: 60 },
+        opacity: { value: 0.5 },
+        shape: { type: "circle" },
+        size: { value: { min: 1, max: 5 } }
+      },
+      detectRetina: true
+    });
+
+    function confirmAndDownload(event) {
+      event.preventDefault();
+      if (confirm("هل تريد تنزيل السيرة الذاتية بصيغة PDF؟")) {
+        const link = document.createElement('a');
+        link.href = 'ADNAN_BISEYRINI_CV.pdf';
+        link.download = 'Adnan_Biseyrini_CV.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  </script>
+
+  <script>
+    // قائمة اللغة
+    (function(){
+      const toggle = document.querySelector('.lang-toggle');
+      const menu = document.querySelector('.lang-menu');
+      if(toggle && menu){
+        toggle.addEventListener('click', function(e){
+          e.stopPropagation();
+          const isOpen = menu.classList.contains('open');
+          menu.classList.toggle('open', !isOpen);
+          toggle.setAttribute('aria-expanded', String(!isOpen));
+        });
+        document.addEventListener('click', function(){
+          menu.classList.remove('open');
+          toggle.setAttribute('aria-expanded','false');
+        });
+        document.addEventListener('keydown', function(e){
+          if(e.key==='Escape'){ menu.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }
+        });
+      }
+    })();
+
+    // منيو الموبايل
+    (function(){
+      const btn = document.querySelector('.menu-toggle');
+      const panel = document.getElementById('mobileMenu');
+      if(!btn || !panel) return;
+
+      function closeMenu(){
+        panel.hidden = true;
+        btn.setAttribute('aria-expanded','false');
+      }
+      function openMenu(){
+        panel.hidden = false;
+        btn.setAttribute('aria-expanded','true');
+      }
+
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        if(panel.hidden) openMenu(); else closeMenu();
+      });
+      panel.addEventListener('click', function(e){
+        const a = e.target.closest('a');
+        if(a){ closeMenu(); }
+      });
+      document.addEventListener('click', function(){ closeMenu(); });
+      document.addEventListener('keydown', function(e){
+        if(e.key==='Escape'){ closeMenu(); }
+      });
+    })();
+
+    // إخفاء الشريط عند التمرير لأسفل وإظهاره عند التمرير لأعلى
+    (function(){
+      const bar = document.querySelector('.topbar');
+      if(!bar) return;
+      let lastY = window.scrollY;
+      let ticking = false;
+      function onScroll(){
+        const y = window.scrollY;
+        const goingDown = y > lastY;
+        if(y > 80 && goingDown){ bar.classList.add('hide'); }
+        else { bar.classList.remove('hide'); }
+        lastY = y;
+        ticking = false;
+      }
+      window.addEventListener('scroll', function(){
+        if(!ticking){
+          window.requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
