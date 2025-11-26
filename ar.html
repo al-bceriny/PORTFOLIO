@@ -119,7 +119,7 @@
     header { padding: 5rem 2rem 3rem; text-align: center; }
     header h1 { font-weight: 700; font-size: 3rem; }
     header p { font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
-    section { padding: 4rem 0; }
+    section { padding: 2rem 0; }
     .section-title { text-align: center; font-weight: 700; font-size: 2rem; margin-bottom: 3rem; }
 
     .project{
@@ -159,13 +159,13 @@
   </style>
 </head>
 <body id="top">
-  <div id="tsparticles"></div>
+  <div id="container">
 
   <!-- الشريط العلوي -->
   <div class="topbar" data-aos="fade-down">
     <div class="topbar-inner">
       <!-- الشعار يمين -->
-      <a href="#top" class="brand">AB</a>
+      <a href="#top" class="brand">A.B</a>
 
       <!-- روابط الديسكتوب (تختفي على الموبايل) -->
       <nav class="mini-nav">
@@ -207,19 +207,14 @@
 
   <header data-aos="fade-down">
     <h1>عدنان بسيريني</h1>
-    <p class="lead">مطوّر ويب</p>
-    <p>مهندس حاسوب شغوف بتطوير الويب، أعمل دائمًا على التحسين والتعلّم المستمر.</p>
   </header>
 
   <!-- About -->
   <section id="about" data-aos="fade-up">
-    <div class="container">
-      <h2 class="section-title">نبذة عني</h2>
-      <p class="text-center" style="max-width: 800px; margin: auto;">
-        أنا <strong>مطوّر ويب</strong> و<strong>مهندس حاسوب</strong> أستمتع ببناء حلول ويب ذكية وسهلة الاستخدام وقابلة للتوسّع. أحرص على التعلّم المستمر والمساهمة في المشاريع مفتوحة المصدر والعمل التطوعي. منفتح على الانتقال والعمل عن بُعد.
-      </p>
-    </div>
     <div class="text-center mt-4" data-aos="zoom-in">
+      <p class="lead">مطوّر ويب</p>
+      <p>مهندس حاسوب شغوف بتطوير الويب، أعمل دائمًا على التحسين والتعلّم المستمر.</p>
+      <div class="container">
       <a href="#" onclick="confirmAndDownload(event)" class="btn btn-light btn-lg">📄 تحميل السيرة الذاتية</a>
     </div>
   </section>
@@ -303,11 +298,11 @@
               <div class="progress"><div class="progress-bar bg-success text-white" role="progressbar" style="width:90%">90%</div></div>
             </div>
             <div class="mb-3">
-              <label>TypeScript</label>
-              <div class="progress"><div class="progress-bar bg-info text-white" role="progressbar" style="width:80%">80%</div></div>
+              <label>Filament</label>
+              <div class="progress"><div class="progress-bar bg-info text-white" role="progressbar" style="width:85%">85%</div></div>
             </div>
             <div class="mb-3">
-              <label>Node.js + Express</label>
+              <label>TypeScript</label>
               <div class="progress"><div class="progress-bar bg-warning text-white" role="progressbar" style="width:70%">70%</div></div>
             </div>
             <div class="mb-3">
@@ -448,6 +443,7 @@
     </div>
   </section>
   <footer><p>© 2025 عدنان بسيريني. جميع الحقوق محفوظة.</p></footer>
+</div>
 
   <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn-top">↑</button>
 
